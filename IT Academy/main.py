@@ -113,6 +113,7 @@ class Courses:
 
 class Student:
     def register_student(self):
+        list = []
         print("""
         #################### Register Student ####################
         
@@ -160,7 +161,7 @@ class Student:
                 Note: Rs 2000 should be paid as deposit which is refundable !!!
                 """)
             choice = int(input("Enter Payment Type no. : "))
-            while choice != 1 and choice !=2:
+            while choice != 1 and choice != 2:
                 print("Invalid Payment Type !!! Try Again")
                 choice = int(input("Enter Payment Type no. : "))
 
@@ -168,10 +169,22 @@ class Student:
                 Totalpayment = 22000
             elif choice == 2:
                 Totalpayment = 12000
+
+            student = {"regNo": regNo, "name": name, "course": course, "payment": Totalpayment}
+            list.append(student)
+            file = open("student.dat", "ab+")
+            pickle.dump(list, file)
+            file.close()
+            print("\n\n\t\tRecord Added Successfully !!!")
+            print("\n\n\t\t\tPress any key to exit ...\n\n\n\n\n")
+            back = input()
+            if back:
+                return
+            os.system('cls')
         else:
             # check if register number already exists
             for x in regNoList:
-                if regNo in x['regNo']:
+                if regNo == x['regNo']:
                     found = True
                 else:
                     found = False
@@ -188,11 +201,11 @@ class Student:
                     print("\n\n")
                     regNo = int(input("Registration Number: "))
 
-                for x in regNoList:
-                    if regNo in x['name']:
-                        found = True
-                    else:
-                        found = False
+                    for x in regNoList:
+                        if regNo == x['regNo']:
+                            found = True
+                        else:
+                            found = False
 
             name = input("Name: ")
             print("""
@@ -230,26 +243,109 @@ class Student:
             elif choice == 2:
                 Totalpayment = 12000
 
+            student = {"regNo": regNo, "name": name, "course": course, "payment": Totalpayment}
+            list.append(student)
+            file = open("student.dat", "ab+")
+            pickle.dump(list, file)
+            file.close()
+            print("\n\n\t\tRecord Added Successfully !!!")
+            print("\n\n\t\t\tPress any key to exit ...\n\n\n\n\n")
+            back = input()
+            if back:
+                return
+            os.system('cls')
+
+    def update(self):
+        regNo = input('Enter Registration Number to update :')
+
+        file = open("student.dat", "rb+")
+        list = pickle.load(file)
+
+        found = 0
+        lst = []
+        for x in list:
+            if regNo == x['regNo']:
+                found = 1
+                x['name'] = input('Enter new name ')
+                print("""
+                            Courses:
+                                1. MERN Stack
+                                2. Full Stack with Django(Python)
+                                3. Full Stack with HTML5 CSS3 PHP & MYSQL 
+                            """)
+                choice = int(input("Enter Course no. : "))
+                while choice == 1 and choice == 2 and choice == 3:
+                    print("Invalid Course Number !!! Try Again")
+                    choice = int(input("Enter Course no. : "))
+
+                if choice == 1:
+                    x['course'] = 'MERN Stack'
+                elif choice == 2:
+                    x['course'] = 'MERN Stack'
+                elif choice == 3:
+                    x['course'] = 'MERN Stack'
+
+                print("""
+                                Payment Type:
+                                    1. Full Payment
+                                    2. Pay in two installments
+
+                                Note: Rs 2000 should be paid as deposit which is refundable !!!
+                                """)
+                choice = int(input("Enter Payment Type no. : "))
+                while choice != 1 and choice != 2:
+                    print("Invalid Payment Type !!! Try Again")
+                    choice = int(input("Enter Payment Type no. : "))
+
+                if choice == 1:
+                    x['payment'] = 22000
+                elif choice == 2:
+                    x['payment'] = 12000
+            lst.append(x)
+
+        if found == 1:
+            file.seek(0)
+            pickle.dump(lst, file)
+            print("Record Updated")
+        else:
+            print('No Record Found !!!')
+
+    def delete(self):
+        regNo = input('Enter Registration Number to DELETE : ')
+
+        file = open("student.dat", "rb+")
+        list = pickle.load(file)
+
+        found = 0
+        lst = []
+        for x in list:
+            if regNo != x['name']:
+                lst.append(x)
+            else:
+                found = 1
+
+        if found == 1:
+            file.seek(0)
+            pickle.dump(lst, file)
+            print("Record Deleted ")
+        else:
+            print('Record not found !!!')
 
     def display(self):
-        pass
+        try:
+            file = open("student.dat", "rb")
+            regNoList = pickle.load(file)
+            file.close()
+        except FileNotFoundError:
+            print("No Records Found !!!")
+        else:
+            # for x in regNoList:
+            #     print(f"Registration Number: {regNoList[x][0]}")
+            #     print(f"Name               : {regNoList[x][1]}")
+            #     print(f"Payment            : {regNoList[x][2]}")
 
-
-class File_operation:
-    def create_account(self):
-        pass
-
-    def display_records(self):
-        pass
-
-    def search_student(self):
-        pass
-
-    def update_records(self):
-        pass
-
-    def delete_records(self):
-        pass
+            for i in regNoList:
+                print(regNoList[i])
 
 
 class Menu:
@@ -279,13 +375,14 @@ class Menu:
                 os.system('cls')
                 Courses.available_courses(self)
             elif choice == 2:
+                os.system('cls')
                 Student.register_student(self)
             elif choice == 3:
-                print("Display Records")
+                Student.display(self)
             elif choice == 4:
-                print("Update Records")
+                Student.update(self)
             elif choice == 5:
-                print("Delete Records")
+                Student.delete(self)
             elif choice == 6:
                 sys.exit()
             else:
