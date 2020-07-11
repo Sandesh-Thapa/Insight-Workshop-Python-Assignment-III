@@ -1,5 +1,6 @@
 import os
 import sys
+import pickle
 
 
 class Courses:
@@ -39,6 +40,37 @@ class Courses:
             return
         os.system('cls')
 
+    def full_stack_php(self):
+        print("""
+
+                ##########  Full Stack(PHP)  ##########
+
+                This course will give you the following Skills:
+
+                Front End Web Development:
+                    HTML.
+                    CSS.
+                    JAVASCRIPT.
+                    BOOTSTRAP.
+                
+                Back End Web Development:
+                    PHP.
+                    MYSQL.
+                    WORDPRESS.
+                    PHP OOP.
+                
+                BASICS:
+                    WEB BASICS.
+                    INTRODUCTION TO XML.
+                    COMPLETE UNDERSTANDING OF JSON.
+                    INTRODUCTION TO REST AND API.                
+              """)
+
+        print("\n\n\t\t\tPress any key to exit ...\n\n\n\n\n")
+        back = input()
+        if back:
+            return
+        os.system('cls')
 
     def available_courses(self):
         print("""
@@ -70,11 +102,154 @@ class Courses:
             os.system('cls')
             Courses.full_stack_django(self)
         elif courseChoice == 3:
-            print("Display Records")
+            os.system('cls')
+            Courses.full_stack_php(self)
         elif courseChoice == 4:
+            os.system("cls")
             return
         else:
             print("\t\t\tWrong choice !!!\n\t\t\tEnter only 1/2/3/4")
+
+
+class Student:
+    def register_student(self):
+        print("""
+        #################### Register Student ####################
+        
+        Enter the details as per the headings...
+        """)
+
+        regNo = int(input("Registration Number: "))
+
+        while regNo < 1:
+            print("\t\n\nInvalid Registration Number !!! ")
+            print('\tRegistration Number should be greater than "0" !!!')
+            print("\tTry Again !!!")
+            print("\n\n")
+            regNo = int(input("Registration Number: "))
+
+        try:
+            file = open("student.dat", "rb")
+            regNoList = pickle.load(file)
+            file.close()
+        except FileNotFoundError:
+            name = input("Name: ")
+            print("""
+                    Courses:
+                        1. MERN Stack
+                        2. Full Stack with Django(Python)
+                        3. Full Stack with HTML5 CSS3 PHP & MYSQL 
+                    """)
+            choice = int(input("Enter Course no. : "))
+            while choice != 1 and choice != 2 and choice != 3:
+                print("Invalid Course Number !!! Try Again")
+                choice = int(input("Enter Course no. : "))
+
+            if choice == 1:
+                course = 'MERN Stack'
+            elif choice == 2:
+                course = 'MERN Stack'
+            elif choice == 3:
+                course = 'MERN Stack'
+
+            print("""
+                Payment Type:
+                    1. Full Payment
+                    2. Pay in two installments
+                
+                Note: Rs 2000 should be paid as deposit which is refundable !!!
+                """)
+            choice = int(input("Enter Payment Type no. : "))
+            while choice != 1 and choice !=2:
+                print("Invalid Payment Type !!! Try Again")
+                choice = int(input("Enter Payment Type no. : "))
+
+            if choice == 1:
+                Totalpayment = 22000
+            elif choice == 2:
+                Totalpayment = 12000
+        else:
+            # check if register number already exists
+            for x in regNoList:
+                if regNo in x['regNo']:
+                    found = True
+                else:
+                    found = False
+
+            while found == True:
+                print(f"Registration Number {regNo} already exists ...")
+                print("Try again with different number !!!")
+                regNo = int(input("Registration Number: "))
+
+                while regNo < 1:
+                    print("\t\n\nInvalid Registration Number !!! ")
+                    print('\tRegistration Number should be greater than "0" !!!')
+                    print("\tTry Again !!!")
+                    print("\n\n")
+                    regNo = int(input("Registration Number: "))
+
+                for x in regNoList:
+                    if regNo in x['name']:
+                        found = True
+                    else:
+                        found = False
+
+            name = input("Name: ")
+            print("""
+            Courses:
+                1. MERN Stack
+                2. Full Stack with Django(Python)
+                3. Full Stack with HTML5 CSS3 PHP & MYSQL 
+            """)
+            choice = int(input("Enter Course no. : "))
+            while choice == 1 and choice == 2 and choice == 3:
+                print("Invalid Course Number !!! Try Again")
+                choice = int(input("Enter Course no. : "))
+
+            if choice == 1:
+                course = 'MERN Stack'
+            elif choice == 2:
+                course = 'MERN Stack'
+            elif choice == 3:
+                course = 'MERN Stack'
+
+            print("""
+                Payment Type:
+                    1. Full Payment
+                    2. Pay in two installments
+
+                Note: Rs 2000 should be paid as deposit which is refundable !!!
+                """)
+            choice = int(input("Enter Payment Type no. : "))
+            while choice != 1 and choice != 2:
+                print("Invalid Payment Type !!! Try Again")
+                choice = int(input("Enter Payment Type no. : "))
+
+            if choice == 1:
+                Totalpayment = 22000
+            elif choice == 2:
+                Totalpayment = 12000
+
+
+    def display(self):
+        pass
+
+
+class File_operation:
+    def create_account(self):
+        pass
+
+    def display_records(self):
+        pass
+
+    def search_student(self):
+        pass
+
+    def update_records(self):
+        pass
+
+    def delete_records(self):
+        pass
 
 
 class Menu:
@@ -104,7 +279,7 @@ class Menu:
                 os.system('cls')
                 Courses.available_courses(self)
             elif choice == 2:
-                print("Register Students")
+                Student.register_student(self)
             elif choice == 3:
                 print("Display Records")
             elif choice == 4:
